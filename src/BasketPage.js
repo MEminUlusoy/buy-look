@@ -5,7 +5,8 @@ import Message from './Message';
 
 function BasketPage() {
 
-  const {baskets,setBaskets,emptyBasket,removeBasket,sums,setSums,shoppingSum,clicked,setClicked} = useContext(ShoppingContext);
+  const {baskets,emptyBasket,removeBasket,sums,increase,decrease,amount} = useContext(ShoppingContext);
+
 
 
   return (
@@ -22,19 +23,18 @@ function BasketPage() {
             baskets.length === 0 ? <Message/> :
 
             baskets.map((basket,ind) => {
-              const {id,brand,ram,desc,cost,img,color,clicked,setClicked} = basket
+              const {id,ram,desc,cost,img,color} = basket;
               return(
                 <div key={ind} className="basket-item-container" >
 
                   <div className="basket-item-left">
+                  
+                    <div className="button-container">
+                      <button className='inc-button'  onClick={() => increase(id)}>+</button>
+                      <p>{amount}</p>
+                      <button className='dec-button' onClick={() => decrease(id)}>-</button>
+                    </div>
 
-                    <input type="checkbox" onClick={()=> {
-                      shoppingSum(id);
-                     }}  
-                    name="" 
-                    id={id} 
-                    />
-                    
                     <div className="basket-item-image">
                       <img src={img} alt="" />
                     </div>

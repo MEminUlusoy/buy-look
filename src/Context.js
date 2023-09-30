@@ -1,7 +1,9 @@
-import { createContext,useState } from "react";
+import { createContext,useReducer,useState } from "react";
 import data from "./data";
+import reducer from "./reducer";
 
 const ShoppingContext = createContext();
+
 
 export const ShoppingContextProvider = ({children}) => {
 
@@ -14,6 +16,10 @@ export const ShoppingContextProvider = ({children}) => {
     const [lists,setLists] = useState(data);
     const [brandClicked,setBrandClicked] = useState(true);
     const [filterClicked,setFilterClicked] = useState(true);
+
+     
+
+   
 
     const filterBrand = (brand) => {
 
@@ -48,6 +54,7 @@ export const ShoppingContextProvider = ({children}) => {
 
     const emptyBasket = () => {
         return setBaskets([]);
+        
     }
 
     const removeBasket = (id) => {
@@ -56,30 +63,33 @@ export const ShoppingContextProvider = ({children}) => {
     }
 
 
+    const increase = (id) => {
+        dispatch({type:'INCREASE', payload:id});
 
-    const shoppingSum = (id) => {
-        const basketCost = baskets.find((item) => item.id === id);
-        if(clicked === 1){
-            console.log("1 çalıştı")
-            setSums(sums  +  parseFloat(basketCost.cost));
-            setClicked(2);
-            
-        }else if(clicked === 2){
-            console.log("2 çalıştı")
-            setSums(sums  -  parseFloat(basketCost.cost));
-            setClicked(1);
-        }
-        
     }
 
+    const decrease = (id) => {
+        dispatch({type:'DECREASE', payload:id});
+
+    }
+
+       
+    const initialState = {
+        cart: data,
+        total: 0,
+        amount: 0,
+    }
+
+    const [state, dispatch] = useReducer(reducer, initialState);
+
     const values = {
+        ...state,
         baskets,
         setBaskets,
         emptyBasket,
         removeBasket,
         sums,
         setSums,
-        shoppingSum,
         clicked,
         setClicked,
         categoriesBrand,
@@ -88,6 +98,8 @@ export const ShoppingContextProvider = ({children}) => {
         filterBrand,
         categoriesRam,
         filterRam,
+        increase,
+        decrease,
     };
 
     return(
